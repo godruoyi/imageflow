@@ -1,0 +1,25 @@
+workflows:
+  default:
+    - name: Resize Image
+      action: resize
+      params:
+        type: fit
+        width: 100
+        height: 100
+
+    - name: Format Image To AVIF
+      action: format
+      params:
+        format: avif
+
+    - name: Upload Image
+      action: upload
+      params:
+        service: s3
+
+services:
+  s3:
+    bucket: my-bucket
+    region: us-west-1
+    access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

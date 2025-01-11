@@ -2,26 +2,52 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "godruoyi-tinypng-raycast",
   "title": "godruoyi-tinypng-raycast",
-  "description": "",
+  "description": "Process Image In Workflow",
   "icon": "extension-icon.png",
   "author": "Godruoyi",
   "license": "MIT",
   "commands": [
     {
-      "name": "xx",
-      "title": "XX",
-      "description": "",
-      "mode": "no-view"
+      "name": "image",
+      "title": "Process Image In Workflow",
+      "subtitle": "Optimize Image In Workflow",
+      "description": "Optimize, Resize, and Compress images in your workflow.",
+      "mode": "no-view",
+      "arguments": [
+        {
+          "name": "workflow",
+          "placeholder": "Workflow Alias",
+          "type": "dropdown",
+          "data": [
+            {
+              "title": "Default",
+              "value": "default"
+            },
+            {
+              "title": "Workflow 1",
+              "value": "one"
+            },
+            {
+              "title": "Workflow 2",
+              "value": "two"
+            }
+          ],
+          "required": false,
+          "description": "Specify the workflow to process the image"
+        }
+      ]
     }
   ],
   "dependencies": {
     "@raycast/api": "^1.88.4",
-    "@raycast/utils": "^1.17.0"
+    "@raycast/utils": "^1.17.0",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.11",
     "@types/node": "20.8.10",
     "@types/react": "18.3.3",
+    "@types/js-yaml": "4.0.9",
     "eslint": "^8.57.0",
     "prettier": "^3.3.3",
     "typescript": "^5.4.5"
