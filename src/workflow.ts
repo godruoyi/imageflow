@@ -1,4 +1,5 @@
 import { Configs, Input, Output, IWorkflow, WorkflowAlias, Node } from "./types";
+import resolveAction from "./actions";
 
 export async function createWorkflow(configs: Configs, name: WorkflowAlias): Promise<IWorkflow> {
   const nodes = configs.workflows[name];
@@ -20,14 +21,10 @@ class Workflow implements IWorkflow {
   }
 
   async run(i: Input) {
-    // implement it with array reduce
-    this.nodes.reduce(async (previousValue, currentValue): Promise<Output> => {
-      const x = await currentValue.action.execute(previousValue);
-
-      return x as Input;
-    }, Promise.resolve(i));
-
-    return i as Output;
+    return (await this.nodes.reduce(async (acc: Promise<Input>, cur: Node) => {
+      const input = await acc;
+      return resolveAction(cur.action)(input, cur.params);
+    }, Promise.resolve(i))) as Output;
   }
 }
 

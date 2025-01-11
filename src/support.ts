@@ -1,8 +1,8 @@
+import fs from "fs";
+import yaml from "js-yaml";
+import path from "path";
 import { getSelectedFinderItems, showToast, Toast } from "@raycast/api";
 import { Configs } from "./types";
-import fs from "fs";
-import path from "path";
-import yaml from "js-yaml";
 
 const ImageExtensions = [".png", ".jpg", ".jpeg", ".webp"];
 

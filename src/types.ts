@@ -2,19 +2,15 @@ export interface Input {
   images: string[];
 }
 
-export interface Output {
-  images: string[];
-}
+export type Output = Input;
 
 export type V = string | number | boolean;
 export type Config = Record<string, V>;
 
-export interface Action {
-  execute: (i: Input) => Promise<Output>;
-}
+export type ActionFn = (i: Input, config: Config) => Promise<Output>;
 
 export interface Node {
-  action: Action;
+  action: string;
   name: string;
   params: Config;
 }
