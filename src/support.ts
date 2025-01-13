@@ -27,14 +27,6 @@ export async function showError(e?: Error | undefined) {
   });
 }
 
-export async function showSuccess(message: string) {
-  await showToast({
-    style: Toast.Style.Animated,
-    title: "Success",
-    message,
-  });
-}
-
 function getWorkflowConfigPath(): string {
   const filePath = path.join(process.env.HOME || "", ".config", "workflow.yaml");
 

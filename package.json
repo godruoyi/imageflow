@@ -12,30 +12,7 @@
       "title": "Process Image In Workflow",
       "subtitle": "Optimize Image In Workflow",
       "description": "Optimize, Resize, and Compress images in your workflow.",
-      "mode": "no-view",
-      "arguments": [
-        {
-          "name": "workflow",
-          "placeholder": "Workflow Alias",
-          "type": "dropdown",
-          "data": [
-            {
-              "title": "Default",
-              "value": "default"
-            },
-            {
-              "title": "Workflow 1",
-              "value": "one"
-            },
-            {
-              "title": "Workflow 2",
-              "value": "two"
-            }
-          ],
-          "required": false,
-          "description": "Specify the workflow to process the image"
-        }
-      ]
+      "mode": "no-view"
     }
   ],
   "dependencies": {
