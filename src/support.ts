@@ -28,12 +28,11 @@ export async function showError(e?: Error | undefined) {
 }
 
 function getWorkflowConfigPath(): string {
+  // todo: using custom path
   const filePath = path.join(process.env.HOME || "", ".config", "workflow.yaml");
 
   if (!fs.existsSync(filePath)) {
-    console.warn("Cannot found custom workflow file, use default workflow file instead, path:", filePath);
-
-    return path.join(__dirname, "..", "workflow.yaml");
+    throw new Error("Workflow config file not found, path: " + filePath);
   }
 
   return filePath;
