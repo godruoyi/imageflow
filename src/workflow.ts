@@ -24,7 +24,7 @@ class Workflow implements IWorkflow {
   async run(i: Input) {
     return (await this.nodes.reduce(async (acc: Promise<Input>, cur: Node) => {
       const input = await acc;
-      const fn = resolveAction(cur.action)(input, cur.params, this.configs);
+      const fn = resolveAction(cur.action)(input, cur.params, this.configs.services, i.image);
 
       return this.terminate(this.wrapWithCleanup(input, this.wrapWithProcessing(cur, fn)));
     }, Promise.resolve(i))) as Output;
@@ -44,7 +44,7 @@ class Workflow implements IWorkflow {
 
   async wrapWithCleanup(input: Input, fn: Promise<Input>): Promise<Input> {
     // todo
-    console.log("Clean up the temporary artifacts from the previous step...");
+    console.log("Clean up the temporary artifacts from the previous step...", input);
 
     return fn;
   }

@@ -1,5 +1,5 @@
 import { getSelectedImages, getWorkflowConfigs, showError } from "./support";
-import { Configs, WorkflowAlias } from "./types";
+import { Input, WorkflowAlias } from "./types";
 import { createWorkflow } from "./workflow";
 
 type Props = {
@@ -14,8 +14,8 @@ export default async function main(props: Props) {
     const configs = await getWorkflowConfigs();
     const workflowName = props.arguments.workflow || ("default" as WorkflowAlias);
     const workflow = await createWorkflow(configs, workflowName);
-    
-    await workflow.run({ images });
+
+    await Promise.all(images.map((image) => workflow.run({ image } as Input)));
   } catch (e) {
     await showError(e as Error);
   }

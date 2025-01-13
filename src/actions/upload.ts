@@ -1,7 +1,7 @@
 import { Config, Input, Output } from "../types";
 
 export default async function (i: Input, config: Config): Promise<Output> {
-  console.log("upload image with: ", config);
+  console.log("upload image with: ", config, i);
 
-  return { images: ["upload"] } as Output;
+  return i as Output;
 }

@@ -1,5 +1,13 @@
+export type PathOrUrl = string;
+export type ImageType = "path" | "url";
+
+export interface Image {
+  type: ImageType;
+  value: PathOrUrl;
+}
+
 export interface Input {
-  images: string[];
+  image: Image;
 }
 
 export type Output = Input;
@@ -9,7 +17,8 @@ export type Config = Record<string, V>;
 
 export type ActionFn =
   | ((i: Input, config: Config) => Promise<Output>)
-  | ((i: Input, config: Config, configs: Configs) => Promise<Output>);
+  | ((i: Input, config: Config, services: Record<string, Config>) => Promise<Output>)
+  | ((i: Input, config: Config, services: Record<string, Config>, originImage: Image) => Promise<Output>);
 
 export interface Node {
   action: string;
