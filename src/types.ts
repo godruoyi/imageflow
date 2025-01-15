@@ -12,8 +12,8 @@ export interface Input {
 
 export type Output = Input;
 
-export type V = string | number | boolean;
-export type Config = Record<string, V>;
+export type V = string | number | boolean | Config;
+export type Config = { [key: string]: V };
 
 export type ActionFn =
   | ((i: Input, config: Config) => Promise<Output>)
