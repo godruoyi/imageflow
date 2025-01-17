@@ -1,6 +1,7 @@
 import { getSelectedImages, getWorkflowConfigs, showError } from "./support";
 import { Input, WorkflowAlias } from "./types";
 import { createWorkflow } from "./workflow";
+import sharp from "sharp";
 
 type Props = {
   arguments: {
@@ -9,6 +10,12 @@ type Props = {
 };
 
 export default async function main(props: Props) {
+  try {
+    console.log(sharp);
+  } catch (e) {
+    console.log(e);
+  }
+
   try {
     const images = await getSelectedImages();
     const configs = await getWorkflowConfigs();
