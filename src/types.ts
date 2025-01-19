@@ -15,10 +15,20 @@ export type Output = Input;
 export type V = string | number | boolean | Config;
 export type Config = { [key: string]: V };
 
+export interface Config2 {
+  get(k: string, defaultV?: V): V;
+}
+
+export interface Imager {
+  get(): Image;
+
+  set(i: Image): void;
+}
+
 export type ActionFn =
   | ((i: Input, config: Config) => Promise<Output>)
   | ((i: Input, config: Config, services: Record<string, Config>) => Promise<Output>)
-  | ((i: Input, config: Config, services: Record<string, Config>, originImage: Image) => Promise<Output>);
+  | ((i: Input, config: Config, services: Record<string, Config>, originImage: Imager) => Promise<Output>);
 
 export interface Node {
   action: string;

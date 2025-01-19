@@ -1,5 +1,5 @@
 import { Config, Input, Output } from "../types";
-import { downloadAndResize, upload } from "../services/tinypng";
+import tinypng from "../services/tinypng";
 import { saveStreamToTmpFile, toImage } from "../support";
 
 /**
@@ -17,8 +17,8 @@ export default async function (i: Input, config: Config, services: Record<string
     throw new Error("TinyPNG key not configured, please check your workflow config file");
   }
 
-  const url = await upload(i.image.value, key as string);
-  const stream = await downloadAndResize(url, key as string, {
+  const url = await tinypng.upload(i.image.value, key as string);
+  const stream = await tinypng.downloadAndResize(url, key as string, {
     method: config?.["type"] as string,
     width: config?.["width"] as number,
     height: config?.["height"] as number,

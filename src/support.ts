@@ -2,7 +2,7 @@ import fs from "fs";
 import yaml from "js-yaml";
 import path from "path";
 import { getSelectedFinderItems, showToast, Toast } from "@raycast/api";
-import { Configs, Image } from "./types";
+import { Config2, Configs, Image, Imager, Input, V } from "./types";
 
 const ImageExtensions = [".png", ".jpg", ".jpeg", ".webp"];
 
@@ -24,6 +24,10 @@ export function isImage(path: string): boolean {
 
 export function toImage(path: string): Image {
   return { type: "path", value: path };
+}
+
+export function toInput(path: string): Input {
+  return { image: toImage(path) };
 }
 
 export async function showError(e?: Error | undefined) {
@@ -76,4 +80,32 @@ export async function saveStreamToFile(stream: NodeJS.ReadableStream, outputPath
     stream.on("error", reject);
     outputStream.on("finish", () => resolve(outputPath));
   });
+}
+
+export class EasyImager implements Imager {
+  private image: Image;
+
+  constructor(i: Input) {
+    this.image = i.image;
+  }
+
+  get(): Image {
+    return this.image;
+  }
+
+  set(i: Image): void {
+    this.image = i;
+  }
+}
+
+export class YamlConfig implements Config2 {
+  private data;
+
+  constructor(data: unknown) {
+    this.data = data;
+  }
+
+  get(k: string, defaultV?: V): V {
+    return defaultV.;
+  }
 }

@@ -60,3 +60,9 @@ export async function downloadAndResize(
 
   return res.body;
 }
+
+export default {
+  download,
+  downloadAndResize,
+  upload,
+};
