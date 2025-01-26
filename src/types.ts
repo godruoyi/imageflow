@@ -16,7 +16,7 @@ export type V = string | number | boolean | Config;
 export type Config = { [key: string]: V };
 
 export interface Config2 {
-  get(k: string, defaultV?: V): V;
+  get(k: string, v?: V): V;
 }
 
 export interface Imager {

@@ -99,13 +99,15 @@ export class EasyImager implements Imager {
 }
 
 export class YamlConfig implements Config2 {
-  private data;
+  private readonly data: object;
 
-  constructor(data: unknown) {
+  constructor(data: object) {
     this.data = data;
   }
 
-  get(k: string, defaultV?: V): V {
-    return defaultV.;
+  get(k: string, v?: V): V {
+    const format = this.data[k] as V;
+
+    console.log(format);
   }
 }
