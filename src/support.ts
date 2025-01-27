@@ -106,7 +106,7 @@ export class YamlConfig implements Config2 {
   }
 
   get(k: string, v?: V): V {
-    const format = this.data[k] as V;
+    const format = this.data[k] as V; // todo
 
     console.log(format);
   }
