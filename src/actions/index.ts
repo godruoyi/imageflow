@@ -1,12 +1,12 @@
 import resize from "./resize";
 import { ActionFn } from "../types";
-import format from "./format";
 import upload from "./upload";
 import overwrite from "./overwrite";
+import convert from "./convert";
 
 const actions = {
   resize: resize,
-  format: format,
+  convert: convert,
   upload: upload,
   overwrite: overwrite,
 };

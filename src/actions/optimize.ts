@@ -19,5 +19,3 @@ async function optimizeByTiny(i: Input, key: string): Promise<Output> {
 
   return { image: toImage(tmp) } as Output;
 }
-
-async function optimizeSharp(): Promise<Output> {}

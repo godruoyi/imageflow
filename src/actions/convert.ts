@@ -1,12 +1,11 @@
 import { Config, Imager, Input, Output } from "../types";
 import path from "path";
 import { toImage, toInput } from "../support";
-import sharp from "sharp";
 
 /**
- * Format
+ * Convert the image to a different format
  *
- * @param i
+ * @param i Input
  * @param config
  * @param _services
  * @param originImage
@@ -17,10 +16,7 @@ export default async function (
   _services: Record<string, Config>,
   originImage: Imager,
 ): Promise<Output> {
-  console.log("TODO: cannot load share module");
-
   const format = config?.["format"] as string;
-  const sharpX = sharp();
 
   // const image = fs.createReadStream(i.image.value);
   const originImagePath = originImage.get().value;

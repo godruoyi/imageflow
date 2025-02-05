@@ -19,8 +19,7 @@
     "@raycast/api": "^1.88.4",
     "@raycast/utils": "^1.17.0",
     "js-yaml": "^4.1.0",
-    "node-fetch": "^3.3.2",
-    "sharp": "^0.33.5"
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.11",

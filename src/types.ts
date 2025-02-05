@@ -1,29 +1,21 @@
-export type PathOrUrl = string;
-export type ImageType = "path" | "url";
+export type Type = "filepath" | "url" | "markdown";
 
 export interface Image {
-  type: ImageType;
-  value: PathOrUrl;
+  type: Type;
+  value: string;
 }
 
-export interface Input {
-  image: Image;
-}
-
-export type Output = Input;
-
-export type V = string | number | boolean | Config;
-export type Config = { [key: string]: V };
-
-export interface Config2 {
-  get(k: string, v?: V): V;
-}
+export type Input = Image;
+export type Output = Image;
 
 export interface Imager {
   get(): Image;
 
   set(i: Image): void;
 }
+
+export type V = string | number | boolean | Config;
+export type Config = { [key: string]: V };
 
 export type ActionFn =
   | ((i: Input, config: Config) => Promise<Output>)

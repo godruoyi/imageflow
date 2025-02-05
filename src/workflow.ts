@@ -1,7 +1,7 @@
-import { Configs, Input, Output, IWorkflow, WorkflowAlias, Node, Imager, Image } from "./types";
+import { Configs, Input, Output, IWorkflow, WorkflowAlias, Node } from "./types";
 import resolveAction from "./actions";
 import { showToast, Toast } from "@raycast/api";
-import { toImage } from "./support";
+import { EasyImager } from "./supports/image";
 
 export async function createWorkflow(configs: Configs, name: WorkflowAlias): Promise<IWorkflow> {
   const nodes = configs.workflows[name];
@@ -66,21 +66,5 @@ class Workflow implements IWorkflow {
 class NullWorkflow implements IWorkflow {
   async run(i: Input) {
     return i as Output;
-  }
-}
-
-class EasyImager implements Imager {
-  private image: Image;
-
-  constructor(i: Input) {
-    this.image = i.image;
-  }
-
-  get(): Image {
-    return this.image;
-  }
-
-  set(i: Image): void {
-    this.image = i;
   }
 }
