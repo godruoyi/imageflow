@@ -1,9 +1,9 @@
-import { Configs, Input, Output, IWorkflow, WorkflowAlias, Node } from "./types";
+import { Input, Output, IWorkflow, WorkflowConfigs, WorkflowAlias, WorkflowNode } from "./types";
 import resolveAction from "./actions";
 import { showToast, Toast } from "@raycast/api";
 import { EasyImager } from "./supports/image";
 
-export async function createWorkflow(configs: Configs, name: WorkflowAlias): Promise<IWorkflow> {
+export async function createWorkflow(configs: WorkflowConfigs, name: WorkflowAlias): Promise<IWorkflow> {
   const nodes = configs.workflows[name];
 
   if (!nodes || nodes.length === 0) {
@@ -14,17 +14,17 @@ export async function createWorkflow(configs: Configs, name: WorkflowAlias): Pro
 }
 
 class Workflow implements IWorkflow {
-  private readonly nodes: Node[];
-  private readonly configs: Configs;
+  private readonly nodes: WorkflowNode[];
+  private readonly configs: WorkflowConfigs;
 
-  constructor(nodes: Node[], configs: Configs) {
+  constructor(nodes: WorkflowNode[], configs: WorkflowConfigs) {
     this.nodes = nodes;
     this.configs = configs;
   }
 
   async run(i: Input) {
     const imager = new EasyImager(i);
-    return (await this.nodes.reduce(async (acc: Promise<Input>, cur: Node) => {
+    return (await this.nodes.reduce(async (acc: Promise<Input>, cur: WorkflowNode) => {
       const input = await acc;
       const fn = resolveAction(cur.action)(input, cur.params, this.configs.services, imager);
 
@@ -32,7 +32,7 @@ class Workflow implements IWorkflow {
     }, Promise.resolve(i))) as Output;
   }
 
-  async wrapWithProcessing(n: Node, fn: Promise<Input>): Promise<Input> {
+  async wrapWithProcessing(n: WorkflowNode, fn: Promise<Input>): Promise<Input> {
     await showToast({
       style: Toast.Style.Success,
       title: `${n.name}...`,

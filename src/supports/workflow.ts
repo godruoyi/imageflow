@@ -1,9 +1,9 @@
 import fs from "fs";
 import yaml from "js-yaml";
 import path from "path";
-import { Configs } from "../types";
+import { WorkflowConfigs } from "../types";
 
-export async function getWorkflowConfigs(): Promise<Configs> {
+export async function getWorkflowConfigs(): Promise<WorkflowConfigs> {
   const path = getWorkflowConfigPath();
   const content = fs.readFileSync(path, "utf-8");
   const doc = yaml.load(content);
@@ -11,10 +11,10 @@ export async function getWorkflowConfigs(): Promise<Configs> {
   if (!doc) {
     console.error("failed to parse workflow config file:", path);
 
-    return {} as Configs;
+    return {} as WorkflowConfigs;
   }
 
-  return doc as Configs;
+  return doc as WorkflowConfigs;
 }
 
 function getWorkflowConfigPath(): string {

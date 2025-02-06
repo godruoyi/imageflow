@@ -22,19 +22,19 @@ export type ActionFn =
   | ((i: Input, config: Config, services: Record<string, Config>) => Promise<Output>)
   | ((i: Input, config: Config, services: Record<string, Config>, originImage: Imager) => Promise<Output>);
 
-export interface Node {
+export interface IWorkflow {
+  run: (i: Input) => Promise<Output>;
+}
+
+export type WorkflowAlias = "default" | "one" | "two";
+
+export interface WorkflowNode {
   action: string;
   name: string;
   params: Config;
 }
 
-export type WorkflowAlias = "default" | "one" | "two";
-
-export interface Configs {
-  workflows: Record<WorkflowAlias, Node[]>;
+export interface WorkflowConfigs {
+  workflows: Record<WorkflowAlias, WorkflowNode[]>;
   services: Record<string, Config>;
-}
-
-export interface IWorkflow {
-  run: (i: Input) => Promise<Output>;
 }

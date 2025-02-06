@@ -1,33 +1,29 @@
 import { Config, Imager, Input, Output } from "../types";
-import path from "path";
-import { toImage, toInput } from "../support";
 
 /**
  * Convert the image to a different format
  *
  * @param i Input
- * @param config
+ * @param _config
  * @param _services
- * @param originImage
+ * @param _originImage
  */
 export default async function (
   i: Input,
-  config: Config,
+  _config: Config,
   _services: Record<string, Config>,
-  originImage: Imager,
+  _originImage: Imager,
 ): Promise<Output> {
-  const format = config?.["format"] as string;
-
-  // const image = fs.createReadStream(i.image.value);
-  const originImagePath = originImage.get().value;
-  const newPath = path.join(
-    path.dirname(originImagePath),
-    path.basename(originImagePath, path.extname(originImagePath)) + "." + format?.toLocaleString(),
-  );
-
-  console.log("Image has been formatted to", format, "and saved to", newPath);
-
-  originImage.set(toImage(newPath));
-
-  return toInput(newPath) as Output;
+  switch (i.type) {
+    case "filepath":
+      return;
+    case "url":
+      return { type: "filepath", value: i.value } as Output;
+    default:
+      throw new Error("unsupported input type in convert action");
+  }
 }
+
+function convertFilepathImageFormat() {}
+
+function convertURLImageFormat(url: string, newformat) {}
