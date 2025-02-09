@@ -23,7 +23,3 @@ export default async function (
       throw new Error("unsupported input type in convert action");
   }
 }
-
-function convertFilepathImageFormat() {}
-
-function convertURLImageFormat(url: string, newformat) {}
