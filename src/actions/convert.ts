@@ -1,25 +1,21 @@
-import { Config, Imager, Input, Output } from "../types";
+import { Config, Image, Imager, Input, Output } from "../types";
+import tinypng from "../services/tinypng";
 
 /**
  * Convert the image to a different format
  *
  * @param i Input
- * @param _config
- * @param _services
- * @param _originImage
+ * @param config
+ * @param services
+ * @param originImage
  */
 export default async function (
   i: Input,
-  _config: Config,
-  _services: Record<string, Config>,
-  _originImage: Imager,
+  config: Config,
+  services: Record<string, Config>,
+  originImage: Imager,
 ): Promise<Output> {
-  switch (i.type) {
-    case "filepath":
-      return;
-    case "url":
-      return { type: "filepath", value: i.value } as Output;
-    default:
-      throw new Error("unsupported input type in convert action");
-  }
+  const key = services?.["tinypng"]?.["apiKey"] as string;
+  const privateUrl = await tinypng.upload(i as Image, key);
+  const x = await tinypng.convert(privateUrl, key, { type: "" });
 }

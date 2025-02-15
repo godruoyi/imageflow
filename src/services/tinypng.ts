@@ -1,5 +1,6 @@
-import { statSync, createReadStream } from "fs";
-import fetch from "node-fetch";
+import { createReadStream } from "fs";
+import fetch, { BodyInit } from "node-fetch";
+import { Image } from "../types";
 
 const ShortenURL = "https://api.tinify.com/shrink";
 
@@ -12,35 +13,54 @@ type ResponseScheme = {
   message?: string;
 };
 
-export async function upload(file: string, key: string): Promise<string> {
-  const { size } = statSync(file);
-  const stream = createReadStream(file);
-
-  const res = await fetch(ShortenURL, {
-    method: "POST",
-    headers: {
-      Authorization: `Basic ${Buffer.from("api:" + key).toString("base64")}`,
-      contentLength: size.toString(),
-    },
-    body: stream,
-  });
-
-  const json = (await res.json()) as ResponseScheme;
-
-  if ("error" in json && json.error) {
-    throw new Error(`failed to upload image to tinypng, error: ${json.error}, message: ${json.message}`);
+async function upload(image: Image, key: string): Promise<string> {
+  switch (image.type) {
+    case "url":
+      return uploadWithURL(image.value, key);
+    case "filepath":
+      return uploadWithFile(image.value, key);
+    default:
+      throw new Error(`unsupported image type when uploading to tinypng, expected url or filepath, got ${image.type}`);
   }
-
-  return json.output.url as string;
 }
 
-export async function download(url: string): Promise<NodeJS.ReadableStream | null> {
+async function uploadWithFile(file: string, key: string): Promise<string> {
+  const stream = createReadStream(file);
+
+  return _upload(stream, key);
+}
+
+async function uploadWithURL(url: string, key: string): Promise<string> {
+  if (isPrivateURL(url)) {
+    return url;
+  }
+
+  return _upload(JSON.stringify({ source: { url } }), key);
+}
+
+/**
+ * Compress the image(only compress, not resize)
+ *
+ * source: https://tinypng.com/developers/reference#compressing-images
+ *
+ * @param url
+ */
+async function compress(url: string): Promise<NodeJS.ReadableStream | null> {
   const res = await fetch(url);
 
   return res.body;
 }
 
-export async function downloadAndResize(
+/**
+ * Compress and resize the image
+ *
+ * source: https://tinypng.com/developers/reference#resizing-images
+ *
+ * @param url
+ * @param key
+ * @param options
+ */
+async function compressAndResize(
   url: string,
   key: string,
   options: {
@@ -49,20 +69,74 @@ export async function downloadAndResize(
     height?: number;
   },
 ): Promise<NodeJS.ReadableStream | null> {
+  return operate(url, key, JSON.stringify({ resize: options }));
+}
+
+/**
+ * Convert the image to a different format
+ *
+ * source: https://tinypng.com/developers/reference#converting-images
+ *
+ * @param url
+ * @param key
+ * @param options
+ */
+async function convert(
+  url: string,
+  key: string,
+  options: {
+    type: string | string[];
+  },
+): Promise<NodeJS.ReadableStream | null> {
+  return operate(url, key, JSON.stringify({ type: options }));
+}
+
+async function operate(url: string, key: string, body?: BodyInit | null): Promise<NodeJS.ReadableStream | null> {
   const res = await fetch(url, {
     method: "POST",
     headers: {
       Authorization: `Basic ${Buffer.from("api:" + key).toString("base64")}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ resize: options }),
+    body,
   });
 
   return res.body;
 }
 
+async function _upload(body: BodyInit | null, key: string): Promise<string> {
+  const res = await fetch(ShortenURL, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${Buffer.from("api:" + key).toString("base64")}`,
+      "Content-Type": "application/json",
+    },
+    body,
+  });
+
+  const json = (await res.json()) as ResponseScheme;
+  console.log("_upload", json);
+
+  if ("error" in json && json.error) {
+    throw new Error(`failed to upload image to tinypng, error: ${json.error}, message: ${json.message}`);
+  }
+
+  return json.output.url as string;
+}
+
+/**
+ * Check if the URL is a private URL like https://api.tinify.com/output/abc123
+ *
+ * @param url
+ * @returns boolean
+ */
+function isPrivateURL(url: string): boolean {
+  return url.indexOf("api.tinify.com/output") !== -1;
+}
+
 export default {
-  download,
-  downloadAndResize,
+  compress,
+  compressAndResize,
   upload,
+  convert,
 };
