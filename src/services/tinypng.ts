@@ -80,6 +80,7 @@ async function compressAndResize(
  * @param url
  * @param key
  * @param options
+ * @param transform
  */
 async function convert(
   url: string,
@@ -87,8 +88,9 @@ async function convert(
   options: {
     type: string | string[];
   },
+  transform?: { background: string },
 ): Promise<NodeJS.ReadableStream | null> {
-  return operate(url, key, JSON.stringify({ type: options }));
+  return operate(url, key, JSON.stringify({ convert: options, transform }));
 }
 
 async function operate(url: string, key: string, body?: BodyInit | null): Promise<NodeJS.ReadableStream | null> {
@@ -100,6 +102,16 @@ async function operate(url: string, key: string, body?: BodyInit | null): Promis
     },
     body,
   });
+
+  if (res.status >= 300) {
+    const json = (await res.json()) as ResponseScheme;
+
+    if ("error" in json && json.error) {
+      throw new Error(`${json.error}, ${json.message}`);
+    }
+
+    throw new Error(`failed to operate image on tinypng, status: ${res.status}`);
+  }
 
   return res.body;
 }
@@ -115,7 +127,6 @@ async function _upload(body: BodyInit | null, key: string): Promise<string> {
   });
 
   const json = (await res.json()) as ResponseScheme;
-  console.log("_upload", json);
 
   if ("error" in json && json.error) {
     throw new Error(`failed to upload image to tinypng, error: ${json.error}, message: ${json.message}`);

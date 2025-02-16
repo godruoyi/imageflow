@@ -3,8 +3,10 @@ import { ActionFn } from "../types";
 import upload from "./upload";
 import overwrite from "./overwrite";
 import convert from "./convert";
+import compress from "./compress";
 
 const actions = {
+  compress: compress,
   resize: resize,
   convert: convert,
   upload: upload,

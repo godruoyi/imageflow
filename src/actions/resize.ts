@@ -1,30 +1,32 @@
-import { Config, Input, Output } from "../types";
+import { Config, Image, Input, Output } from "../types";
 import tinypng from "../services/tinypng";
-import { saveStreamToTmpFile, toImage } from "../support";
+import { saveStreamToTmpFile } from "../supports/file";
+import path from "path";
 
 /**
- * Resize image with TinyPNG
+ * Resize image with TinyPNG, this will compress and resize the image.
  *
- * @param i the input must be an image path
+ * see https://tinypng.com/developers/reference#resizing-images
+ *
+ * @param i the input must be an image path or url
  * @param config
  * @param services
  *
- * @returns the output is an image path
+ * @returns resized image path
  */
 export default async function (i: Input, config: Config, services: Record<string, Config>): Promise<Output> {
-  const key = services?.["tinypng"]?.["apiKey"];
-  if (!key) {
-    throw new Error("TinyPNG key not configured, please check your workflow config file");
-  }
+  const key = services?.["tinypng"]?.["apiKey"] as string;
 
-  const url = await tinypng.upload(i.image.value, key as string);
-  const stream = await tinypng.downloadAndResize(url, key as string, {
+  const privateUrl = await tinypng.upload(i as Image, key as string);
+  const stream = (await tinypng.compressAndResize(privateUrl, key as string, {
     method: config?.["type"] as string,
     width: config?.["width"] as number,
     height: config?.["height"] as number,
-  });
+  })) as NodeJS.ReadableStream;
 
-  const tmp = await saveStreamToTmpFile(stream as NodeJS.ReadableStream, i.image.value);
+  const newfile = await saveStreamToTmpFile(stream, path.basename(i.value));
 
-  return { image: toImage(tmp) } as Output;
+  console.log(`resized image path: ${newfile}`);
+
+  return { type: "filepath", value: newfile } as Output;
 }

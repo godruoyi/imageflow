@@ -1,14 +1,7 @@
 workflows:
   default:
-    - name: Resize Image
-      action: resize
-      params:
-        type: fit
-        width: 100
-        height: 100
-
     - name: Format Image To AVIF
-      action: format
+      action: convert
       params:
         format: avif
         options:

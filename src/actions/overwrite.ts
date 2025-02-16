@@ -1,14 +1,18 @@
 import { Config, Imager, Input, Output } from "../types";
 import fs from "fs";
-import { saveStreamToFile, toImage, toInput } from "../support";
+import { saveStreamToFile } from "../supports/file";
+import { buildNewImageName } from "../supports/image";
+import path from "path";
 
 /**
  * Overwrite the origin image with the processed image.
  *
- * @param i input, must be full image path
+ * @param i input must be an image path
  * @param _config
  * @param _services
- * @param originImage
+ * @param originImage the origin image will be renamed to the processed image path
+ *
+ * @return overwritten image path
  */
 export default async function (
   i: Input,
@@ -16,17 +20,18 @@ export default async function (
   _services: Record<string, Config>,
   originImage: Imager,
 ): Promise<Output> {
-  const inputPath = i.image.value;
+  const inputPath = i.value;
   const originPath = originImage.get().value;
 
   if (inputPath == originPath) {
     console.log("Skip Overwrite since origin image path same with processed image");
 
-    return toInput(originPath) as Output;
+    return i as Output;
   }
 
-  const stream = fs.createReadStream(i.image.value as string);
-  await saveStreamToFile(stream, originImage.get().value);
+  const newfile = originPath.replace(path.basename(originPath), path.basename(inputPath));
 
-  return toInput(originPath) as Output;
+  await saveStreamToFile(fs.createReadStream(inputPath), newfile);
+
+  return { type: "filepath", value: newfile } as Output;
 }

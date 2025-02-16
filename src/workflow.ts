@@ -46,7 +46,7 @@ class Workflow implements IWorkflow {
 
   async wrapWithCleanup(input: Input, fn: Promise<Input>): Promise<Input> {
     // todo
-    console.log("Clean up the temporary artifacts from the previous step...", input);
+    // console.log("Clean up the temporary artifacts from the previous step...", input);
 
     return fn;
   }
