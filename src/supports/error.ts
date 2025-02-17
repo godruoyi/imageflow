@@ -1,6 +1,6 @@
 import { showToast, Toast } from "@raycast/api";
 
-export async function showError(e?: Error | undefined) {
+export async function showError(e?: Error | unknown) {
   await showToast({
     style: Toast.Style.Failure,
     title: "Error",

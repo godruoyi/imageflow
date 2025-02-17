@@ -6,10 +6,16 @@ const ImageExtensions = [".png", ".jpg", ".jpeg", ".webp"];
 
 export async function getSelectedImages(): Promise<Image[]> {
   try {
-    return (await getSelectedFinderItems())
+    const images = (await getSelectedFinderItems())
       .map((f) => f.path)
       .filter(isImage)
       .map((p) => toImage(p));
+
+    if (images.length === 0 || images.length > 1) {
+      throw new Error("Please select only one image");
+    }
+    
+    return images;
   } catch (e) {
     const message = e instanceof Error ? e.message : "An error occurred";
     throw new Error(message);

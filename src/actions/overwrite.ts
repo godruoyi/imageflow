@@ -25,13 +25,16 @@ export default async function (
 
   if (inputPath == originPath) {
     console.log("Skip Overwrite since origin image path same with processed image");
-
     return i as Output;
   }
 
-  const newfile = originPath.replace(path.basename(originPath), path.basename(inputPath));
+  const filename = buildNewImageName(originImage.get(), path.extname(inputPath));
+  const newfile = originPath.replace(path.basename(originPath), filename);
 
   await saveStreamToFile(fs.createReadStream(inputPath), newfile);
+
+  fs.unlinkSync(originPath);
+  originImage.set({ type: "filepath", value: newfile });
 
   return { type: "filepath", value: newfile } as Output;
 }

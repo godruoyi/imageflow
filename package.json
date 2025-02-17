@@ -8,11 +8,11 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "image",
+      "name": "index",
       "title": "Process Image In Workflow",
       "subtitle": "Optimize Image In Workflow",
-      "description": "Optimize, Resize, and Compress images in your workflow.",
-      "mode": "no-view"
+      "description": "Optimize, Resize, and Compress images as a workflow.",
+      "mode": "view"
     }
   ],
   "dependencies": {

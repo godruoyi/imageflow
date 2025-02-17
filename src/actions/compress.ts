@@ -20,8 +20,6 @@ export default async function (i: Input, config: Config, services: Record<string
 
   const privateUrl = await tinypng.upload(i as Image, key);
 
-  console.log(`compressed image url: ${privateUrl}, output type: ${outputType}`);
-
   if (outputType && outputType === "url") {
     return { type: "url", value: privateUrl } as Output;
   }
