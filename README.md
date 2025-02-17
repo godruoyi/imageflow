@@ -45,6 +45,12 @@ workflows:
         bucket: gblog-images
         cdn: https://images.godruoyi.com
         service: s3
+
+    - name: Convert URL to Markdown format
+      action: tomarkdown
+
+    - name: Copy to clipboard
+      action: clipboard 
 services:
   s3:
     # example to upload file to cloudflare R2 storage
@@ -58,15 +64,15 @@ services:
 
 ## Actions
 
-| Action     | Description                                 | Input           | Output          |
-|------------|---------------------------------------------|-----------------|-----------------|
-| resize     | Resize and compress image via sharp         | filepath or url | filepath        |
-| compress   | Compress image via sharp (only compress)    | filepath or url | filepath or url |
-| convert    | Convert image format via sharp              | filepath or url | filepath        |
-| overwrite  | Overwrite original images                   | filepath        | filepath        |
-| upload     | Upload image to S3 or Cloudflare R2 Storage | filepath        | url             |
-| clipboard  | Copy image to clipboard                     | filepath or url | Input           |
-| tomarkdown | Convert image to markdown format            | filepath or url | markdown        |
+| Action     | Description                                 | Input           | Output          | Params                                                                                              |
+|------------|---------------------------------------------|-----------------|-----------------|-----------------------------------------------------------------------------------------------------|
+| resize     | Resize and compress image via sharp         | filepath or url | filepath        | width, height, type, see [request option](https://tinypng.com/developers/reference#request-options) |
+| compress   | Compress image via sharp (only compress)    | filepath or url | filepath or url | output_type?: file or url                                                                           |
+| convert    | Convert image format via sharp              | filepath or url | filepath        | format: jpeg, png, webp, avif                                                                       |
+| overwrite  | Overwrite original images                   | filepath        | filepath        | -                                                                                                   |
+| upload     | Upload image to S3 or Cloudflare R2 Storage | filepath        | url             | bucket, root?, cdn?                                                                                 |
+| clipboard  | Copy image to clipboard                     | filepath or url | Input           | -                                                                                                   |
+| tomarkdown | Convert image to markdown format            | filepath or url | markdown        | -                                                                                                   |
 
 
 ## Development

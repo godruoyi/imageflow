@@ -112,7 +112,7 @@ ${setups}
       }
       if (line.includes(step)) {
         const l = line.replace(/^(\s*-\s*)\S+/, "$1✅");
-        const subLine = `  - ${result}`;
+        const subLine = `  - \`${result}\``;
         return `${l}\n${subLine}`;
       }
       if (line.includes("☑️")) {
