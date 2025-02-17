@@ -18,6 +18,7 @@ export type V = string | number | boolean | Config;
 export type Config = { [key: string]: V };
 
 export type ActionFn =
+  | ((i: Input) => Promise<Output>)
   | ((i: Input, config: Config) => Promise<Output>)
   | ((i: Input, config: Config, services: Record<string, Config>) => Promise<Output>)
   | ((i: Input, config: Config, services: Record<string, Config>, originImage: Imager) => Promise<Output>);

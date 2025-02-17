@@ -4,6 +4,8 @@ import upload from "./upload";
 import overwrite from "./overwrite";
 import convert from "./convert";
 import compress from "./compress";
+import clipboard from "./clipboard";
+import tomarkdown from "./tomarkdown";
 
 const actions = {
   compress: compress,
@@ -11,6 +13,8 @@ const actions = {
   convert: convert,
   upload: upload,
   overwrite: overwrite,
+  clipboard: clipboard,
+  tomarkdown: tomarkdown,
 };
 
 export default function resolveAction(name: string): ActionFn {
