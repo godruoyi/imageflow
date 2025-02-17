@@ -2,7 +2,7 @@ import { getSelectedFinderItems } from "@raycast/api";
 import { Image, Imager, Input } from "../types";
 import path from "path";
 
-const ImageExtensions = [".png", ".jpg", ".jpeg", ".webp"];
+const ImageExtensions = [".png", ".jpg", ".jpeg", ".webp", ".avif", ".apng"];
 
 export async function getSelectedImages(): Promise<Image[]> {
   try {
@@ -14,7 +14,7 @@ export async function getSelectedImages(): Promise<Image[]> {
     if (images.length === 0 || images.length > 1) {
       throw new Error("Please select only one image");
     }
-    
+
     return images;
   } catch (e) {
     const message = e instanceof Error ? e.message : "An error occurred";

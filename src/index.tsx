@@ -23,6 +23,8 @@ export default function Index(props: Props) {
     }
 
     hasRun.current = true;
+
+    console.log("Start running workflow...");
     await run(setMarkdown, props.arguments.workflow);
   }, []);
 
@@ -41,9 +43,6 @@ async function run(
 
     await Promise.all(images.map((image) => workflow.run(image as Input)));
   } catch (e) {
-    console.log("-----");
-    console.log(e);
-    console.log("-----");
     await showError(e);
   }
 

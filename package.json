@@ -16,6 +16,7 @@
     }
   ],
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.749.0",
     "@raycast/api": "^1.88.4",
     "@raycast/utils": "^1.17.0",
     "js-yaml": "^4.1.0",
