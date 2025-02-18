@@ -4,6 +4,8 @@ Process images using workflow.
 
 Imageflow is a Raycast extension that allows you to process images using a custom workflow. You can resize, compress, convert image format, and upload images to S3 or Cloudflare R2 Storage.
 
+> This extension still in development and does not submit to Raycast Extension yet, you can clone this repo and install it locally.
+
 ## Support Actions
 
 - [x] 🌰 Resize And Compress Image by [sharp](https://sharp.pixelplumbing.com/)
