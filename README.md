@@ -75,6 +75,17 @@ services:
 | tomarkdown | Convert image to markdown format            | filepath or url | markdown        | -                                                                                                   |
 
 
+## TODO
+
+- [ ] Introduction of sharp to process images locally
+- [ ] OpenDAL
+- [ ] Support more image processing actions like:
+  - [ ] Rename image with uuid or date or something else 
+  - [ ] Watermark
+  - [ ] Move to folder
+  - [ ] Upload to other cloud storage like Aliyun OSS, Qiniu, Tencent COS, but it's better to use OpenDAL if possible
+
+
 ## Development
 
 Clone this repo and install it locally in developer mode.
