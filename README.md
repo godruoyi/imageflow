@@ -86,13 +86,15 @@ services:
 
 ## TODO
 
-- [ ] Introduction of sharp to process images locally
-- [ ] OpenDAL
+- [ ] Support process image from clipboard 🍅🍅🍅🍅🍅
+- [ ] Configuration workflow.yml when extension installed 🍅🍅🍅🍅🍅
+- [ ] Introduction of sharp to process images locally 🤔
+- [ ] OpenDAL 🤔
 - [ ] Support more image processing actions like:
   - [x] Rename image with uuid or date or something else 
-  - [ ] Watermark
-  - [ ] Move to folder
-  - [ ] Upload to other cloud storage like Aliyun OSS, Qiniu, Tencent COS, but it's better to use OpenDAL if possible
+  - [ ] Watermark 🤔
+  - [ ] Move to folder 🍅🍅🍅
+  - [ ] Upload to other cloud storage like Aliyun OSS, Qiniu, Tencent COS, but it's better to use OpenDAL if possible 🤔
 
 
 ## Development
