@@ -39,6 +39,12 @@ workflows:
 
     - name: Overwrite Original images
       action: overwrite
+      
+    - name: Rename to `yyyy_MM_dd` format
+      action: rename
+      params:
+        # available variables: {uuid}, {timestamp}, {yyyy}, {yyyy_MM}, {yyyy_MM_dd}
+        to: "{yyyy_MM_dd}" 
 
     - name: Upload Image To S3
       action: upload
@@ -75,6 +81,7 @@ services:
 | upload     | Upload image to S3 or Cloudflare R2 Storage | filepath        | url             | bucket, root?, cdn?                                                                                 |
 | clipboard  | Copy image to clipboard                     | filepath or url | Input           | -                                                                                                   |
 | tomarkdown | Convert image to markdown format            | filepath or url | markdown        | -                                                                                                   |
+| rename     | Rename image with uuid or date or something | filepath        | filepath        | to: "{uuid}", "{timestamp}", "{yyyy}", "{yyyy_MM}", "{yyyy_MM_dd}"                                  |
 
 
 ## TODO
@@ -82,7 +89,7 @@ services:
 - [ ] Introduction of sharp to process images locally
 - [ ] OpenDAL
 - [ ] Support more image processing actions like:
-  - [ ] Rename image with uuid or date or something else 
+  - [x] Rename image with uuid or date or something else 
   - [ ] Watermark
   - [ ] Move to folder
   - [ ] Upload to other cloud storage like Aliyun OSS, Qiniu, Tencent COS, but it's better to use OpenDAL if possible

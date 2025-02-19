@@ -6,6 +6,7 @@ import convert from "./convert";
 import compress from "./compress";
 import clipboard from "./clipboard";
 import tomarkdown from "./tomarkdown";
+import rename from "./rename";
 
 const actions = {
   compress: compress,
@@ -15,6 +16,7 @@ const actions = {
   overwrite: overwrite,
   clipboard: clipboard,
   tomarkdown: tomarkdown,
+  rename: rename,
 };
 
 export default function resolveAction(name: string): ActionFn {
