@@ -46,7 +46,7 @@ async function getImagesFromClipboard(): Promise<Image[]> {
   }
 
   if (meta.mime.startsWith("image/") && isImage(`.${meta.ext}`)) {
-    return [toImage(p)];
+    return [{ type: "filepath", value: p } as Image];
   }
 
   return [] as Image[];
@@ -55,8 +55,13 @@ async function getImagesFromClipboard(): Promise<Image[]> {
 export function buildNewImageName(image: Image, extension: string): string {
   const originName = path.basename(image.value);
   const ext = path.extname(originName);
+  const newExt = normalizeExtension(extension);
 
-  return originName.replace(ext, normalizeExtension(extension));
+  if (!ext) {
+    return `${originName}${newExt}`;
+  }
+
+  return originName.replace(new RegExp(`${ext}$`), newExt);
 }
 
 /**
