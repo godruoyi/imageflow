@@ -30,7 +30,12 @@ async function getImagesFromSelectedFinderItems(): Promise<Image[]> {
 }
 
 async function getImagesFromClipboard(): Promise<Image[]> {
-  const { file } = await Clipboard.read();
+  const { text, file } = await Clipboard.read();
+
+  // todo support url
+  if (text && text.startsWith("http")) {
+    throw new Error("cannot get images from clipboard when the content is a URL");
+  }
 
   if (!file || !file.startsWith("file://")) {
     return [] as Image[];
@@ -44,6 +49,8 @@ async function getImagesFromClipboard(): Promise<Image[]> {
     console.error("cannot get file type for clipboard file path, file: ", file);
     return [] as Image[];
   }
+
+  console.log("clipboard file meta: ", meta);
 
   if (meta.mime.startsWith("image/") && isImage(`.${meta.ext}`)) {
     return [{ type: "filepath", value: p } as Image];
