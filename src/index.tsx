@@ -2,7 +2,7 @@ import { Detail } from "@raycast/api";
 import { usePromise } from "@raycast/utils";
 import React, { useRef, useState } from "react";
 import { Input, WorkflowAlias } from "./types";
-import { getSelectedImages } from "./supports/image";
+import { getImages } from "./supports/image";
 import { getWorkflowConfigs } from "./supports/workflow";
 import { createWorkflow } from "./workflow";
 import { showError } from "./supports/error";
@@ -23,8 +23,6 @@ export default function Index(props: Props) {
     }
 
     hasRun.current = true;
-
-    console.log("Start running workflow...");
     await run(setMarkdown, props.arguments.workflow);
   }, []);
 
@@ -36,7 +34,7 @@ async function run(
   workflowAlias?: WorkflowAlias,
 ): Promise<string> {
   try {
-    const images = await getSelectedImages();
+    const images = await getImages();
     const configs = await getWorkflowConfigs();
     const workflowName = workflowAlias || ("default" as WorkflowAlias);
     const workflow = await createWorkflow(configs, workflowName, setMarkdown);

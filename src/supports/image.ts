@@ -1,32 +1,74 @@
-import { getSelectedFinderItems } from "@raycast/api";
+import { getSelectedFinderItems, Clipboard } from "@raycast/api";
 import { Image, Imager, Input } from "../types";
 import path from "path";
+import { fileTypeFromFile } from "file-type";
 
 const ImageExtensions = [".png", ".jpg", ".jpeg", ".webp", ".avif", ".apng"];
 
-export async function getSelectedImages(): Promise<Image[]> {
+export async function getImages(): Promise<Image[]> {
+  let images: Image[] = [];
+
   try {
-    const images = (await getSelectedFinderItems())
-      .map((f) => f.path)
-      .filter(isImage)
-      .map((p) => toImage(p));
-
-    if (images.length === 0 || images.length > 1) {
-      throw new Error("Please select only one image");
-    }
-
-    return images;
+    // if finder is not the front-most application will try to get images from clipboard
+    images = await getImagesFromSelectedFinderItems();
   } catch (e) {
-    const message = e instanceof Error ? e.message : "An error occurred";
-    throw new Error(message);
+    images = await getImagesFromClipboard();
   }
+
+  if (images.length === 0) {
+    throw new Error("cannot get images from Finder or Clipboard or the selected images are not supported");
+  }
+
+  return images;
+}
+
+async function getImagesFromSelectedFinderItems(): Promise<Image[]> {
+  return (await getSelectedFinderItems())
+    .map((f) => f.path)
+    .filter(isImage)
+    .map((p) => toImage(p));
+}
+
+async function getImagesFromClipboard(): Promise<Image[]> {
+  const { text, file } = await Clipboard.read();
+
+  // todo support url
+  if (text && text.startsWith("http")) {
+    throw new Error("cannot get images from clipboard when the content is a URL");
+  }
+
+  if (!file || !file.startsWith("file://")) {
+    return [] as Image[];
+  }
+
+  // format image path to convert %20 to space
+  const p = file.replace("%20", " ").replace("file://", "");
+  const meta = await fileTypeFromFile(p);
+
+  if (!meta) {
+    console.error("cannot get file type for clipboard file path, file: ", file);
+    return [] as Image[];
+  }
+
+  console.log("clipboard file meta: ", meta);
+
+  if (meta.mime.startsWith("image/") && isImage(`.${meta.ext}`)) {
+    return [{ type: "filepath", value: p } as Image];
+  }
+
+  return [] as Image[];
 }
 
 export function buildNewImageName(image: Image, extension: string): string {
   const originName = path.basename(image.value);
   const ext = path.extname(originName);
+  const newExt = normalizeExtension(extension);
 
-  return originName.replace(ext, normalizeExtension(extension));
+  if (!ext) {
+    return `${originName}${newExt}`;
+  }
+
+  return originName.replace(new RegExp(`${ext}$`), newExt);
 }
 
 /**
