@@ -4,8 +4,6 @@ workflows:
       action: convert
       params:
         format: avif
-        options:
-          quality: 60
 
     - name: Upload Image
       action: upload

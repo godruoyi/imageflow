@@ -72,16 +72,16 @@ services:
 
 ## Actions
 
-| Action     | Description                                 | Input           | Output          | Params                                                                                              |
-|------------|---------------------------------------------|-----------------|-----------------|-----------------------------------------------------------------------------------------------------|
-| resize     | Resize and compress image via sharp         | filepath or url | filepath        | width, height, type, see [request option](https://tinypng.com/developers/reference#request-options) |
-| compress   | Compress image via sharp (only compress)    | filepath or url | filepath or url | output_type?: file or url                                                                           |
-| convert    | Convert image format via sharp              | filepath or url | filepath        | format: jpeg, png, webp, avif                                                                       |
-| overwrite  | Overwrite original images                   | filepath        | filepath        | -                                                                                                   |
-| upload     | Upload image to S3 or Cloudflare R2 Storage | filepath        | url             | bucket, root?, cdn?                                                                                 |
-| clipboard  | Copy image to clipboard                     | filepath or url | Input           | -                                                                                                   |
-| tomarkdown | Convert image to markdown format            | filepath or url | markdown        | -                                                                                                   |
-| rename     | Rename image with uuid or date or something | filepath        | filepath        | to: "{uuid}", "{timestamp}", "{yyyy}", "{yyyy_MM}", "{yyyy_MM_dd}"                                  |
+| Action     | Description                                 | Input           | Output          | Params                                                                                                                               |
+|------------|---------------------------------------------|-----------------|-----------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| resize     | Resize and compress image via sharp         | filepath or url | filepath        | width: number<br/>height: number<br/>type: string<br/>See [request option](https://tinypng.com/developers/reference#request-options) |
+| compress   | Compress image via sharp (only compress)    | filepath or url | filepath or url | output_type?: file or url                                                                                                            |
+| convert    | Convert image format via sharp              | filepath or url | filepath        | format: string, available formats: jpeg, png, webp, avif                                                                             |
+| overwrite  | Overwrite original images                   | filepath        | filepath        | -                                                                                                                                    |
+| upload     | Upload image to S3 or Cloudflare R2 Storage | filepath        | url             | bucket: string<br/>root?: string<br/>cdn?: string                                                                                    |
+| clipboard  | Copy image to clipboard                     | filepath or url | Input           | -                                                                                                                                    |
+| tomarkdown | Convert image to markdown format            | filepath or url | markdown        | -                                                                                                                                    |
+| rename     | Rename image with uuid or date or something | filepath        | filepath        | to: string<br/>available variable name "{uuid}", "{timestamp}", "{yyyy}", "{yyyy_mm}", "{yyyy_mm_dd}"                                |
 
 
 ## TODO

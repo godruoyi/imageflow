@@ -8,8 +8,8 @@ const availableVariables: Record<string, () => string> = {
   uuid: uuidFormater,
   timestamp: timestampFormater,
   yyyy: dateFormater("yyyy"),
-  yyyy_MM: dateFormater("yyyy-MM"),
-  yyyy_MM_dd: dateFormater("yyyy-MM-dd"),
+  yyyy_mm: dateFormater("yyyy-mm"),
+  yyyy_mm_dd: dateFormater("yyyy-mm-dd"),
 };
 
 /**
@@ -69,11 +69,11 @@ function dateFormater(format?: string): () => string {
       return yyyy.toString();
     }
 
-    if (format === "yyyy-MM") {
+    if (format === "yyyy-mm") {
       return `${yyyy}-${mm}`;
     }
 
-    if (format === "yyyy-MM-dd") {
+    if (format === "yyyy-mm-dd") {
       return `${yyyy}-${mm}-${dd}`;
     }
 
