@@ -92,7 +92,7 @@ async function getImageFromFileProtocol(file?: string): Promise<Image | null> {
 }
 
 async function getImagesFromURL(): Promise<Image | null> {
-  throw new Error("process image from URL is not supported yet");
+  throw new Error("process image from url is not supported yet");
 }
 
 function normalizeExtension(extension: string): string {

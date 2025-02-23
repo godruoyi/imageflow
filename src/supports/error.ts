@@ -1,13 +1,13 @@
-import { showHUD } from "@raycast/api";
+import { showToast, Toast } from "@raycast/api";
 
-export async function showError(e?: Error | unknown) {
-  await showHUD(e instanceof Error ? e.message : "An error occurred", {
-    clearRootSearch: true,
-  });
-
-  // await showToast({
-  //   style: Toast.Style.Failure,
-  //   title: "Error",
-  //   message: e instanceof Error ? e.message : "An error occurred",
+export function showError(e?: Error | unknown) {
+  // await showHUD(e instanceof Error ? e.message : "An error occurred", {
+  //   clearRootSearch: true,
   // });
+
+  showToast({
+    style: Toast.Style.Failure,
+    title: "Error",
+    message: e instanceof Error ? e.message : "An error occurred",
+  }).then();
 }

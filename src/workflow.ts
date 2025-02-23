@@ -42,19 +42,19 @@ class Workflow implements IWorkflow {
   }
 
   async wrapWithProcessing(n: WorkflowNode, fn: Promise<Input>): Promise<Input> {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    console.log(`Processing ${n.name}...`);
     return fn;
   }
 
   async terminate(n: WorkflowNode, fn: Promise<Input>, state: StateUpdater): Promise<Input> {
-    const input = await fn;
-    console.log(`Processed ${n.name}`);
+    try {
+      const output = await fn;
+      await state.success(n.name, `done: ${output.value}`);
+      return Promise.resolve(output);
+    } catch (e) {
+      await state.error(n.name, e instanceof Error ? e.message : "unknown error");
 
-    await state.finish(n.name, input.value);
-
-    return Promise.resolve(input);
+      throw e;
+    }
   }
 }
 
@@ -79,45 +79,59 @@ class StateUpdater {
     return this.log;
   }
 
-  async finish(step: string, result: string) {
-    const log = this.updateStepStatus(step, this.get(), result);
+  async error(step: string, msg: string) {
+    return this.logging(step, msg, "🚨");
+  }
+
+  async success(step: string, msg: string) {
+    return this.logging(step, msg, "✅");
+  }
+
+  async logging(step: string, msg: string, emoji: string) {
+    const log = this.updateStepStatus(step, this.get(), msg, emoji);
 
     this.log = log;
     this.stater(log);
   }
 
   prepareInitState(nodes: WorkflowNode[], i: Image) {
-    const filename = path.basename(i.value);
     const setups = nodes.map((n) => `- ☑️ ${n.name}`).join("\n");
 
     return `
-## Progressing image (${filename}) ![loading](https://images.godruoyi.com/loading.gif)
+## Progressing image ![loading](https://images.godruoyi.com/loading.gif)
+
+image: ${i.value}
 
 ${setups}
 `;
   }
 
-  updateStepStatus(step: string, state: string, result: string) {
+  updateStepStatus(step: string, state: string, result: string, emoji?: string) {
     if (step === "") {
       return state;
     }
 
+    // todo, i don't like this flow right now, let's refactor it later
     const lines = state.split(/\n/);
     let index = -1;
     let allStepsDone = true;
+    const error = emoji !== "✅";
 
     const updatedLines = lines.map((line, i) => {
       if (line.includes("Progressing image")) {
         index = i;
       }
+
       if (line.includes(step)) {
-        const l = line.replace(/^(\s*-\s*)\S+/, "$1✅");
+        const l = line.replace(/^(\s*-\s*)\S+/, `$1${emoji}`);
         const subLine = `  - \`${result}\``;
         return `${l}\n${subLine}`;
       }
+
       if (line.includes("☑️")) {
         allStepsDone = false;
       }
+
       return line;
     });
 
@@ -125,6 +139,11 @@ ${setups}
       updatedLines[index] = updatedLines[index]
         .replace("Progressing", "Successfully processed")
         .replace("![loading](https://images.godruoyi.com/loading.gif)", "✅");
+    }
+    if (error && index !== -1) {
+      updatedLines[index] = updatedLines[index]
+        .replace("Progressing", "Error Process")
+        .replace("![loading](https://images.godruoyi.com/loading.gif)", emoji as string);
     }
 
     return updatedLines.join("\n");
