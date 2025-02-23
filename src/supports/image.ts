@@ -6,12 +6,13 @@ import { fileTypeFromFile } from "file-type";
 const ImageExtensions = [".png", ".jpg", ".jpeg", ".webp", ".avif", ".apng"];
 
 export async function getImages(): Promise<Image[]> {
-  let images: Image[] = [];
+  let images: Image[];
 
   try {
-    // if finder is not the front-most application will try to get images from clipboard
     images = await getImagesFromSelectedFinderItems();
   } catch (e) {
+    // if finder is not the front-most application will throw an error
+    // we can try to get images from clipboard as a fallback
     images = await getImagesFromClipboard();
   }
 
@@ -20,43 +21,6 @@ export async function getImages(): Promise<Image[]> {
   }
 
   return images;
-}
-
-async function getImagesFromSelectedFinderItems(): Promise<Image[]> {
-  return (await getSelectedFinderItems())
-    .map((f) => f.path)
-    .filter(isImage)
-    .map((p) => toImage(p));
-}
-
-async function getImagesFromClipboard(): Promise<Image[]> {
-  const { text, file } = await Clipboard.read();
-
-  // todo support url
-  if (text && text.startsWith("http")) {
-    throw new Error("cannot get images from clipboard when the content is a URL");
-  }
-
-  if (!file || !file.startsWith("file://")) {
-    return [] as Image[];
-  }
-
-  // format image path to convert %20 to space
-  const p = file.replace("%20", " ").replace("file://", "");
-  const meta = await fileTypeFromFile(p);
-
-  if (!meta) {
-    console.error("cannot get file type for clipboard file path, file: ", file);
-    return [] as Image[];
-  }
-
-  console.log("clipboard file meta: ", meta);
-
-  if (meta.mime.startsWith("image/") && isImage(`.${meta.ext}`)) {
-    return [{ type: "filepath", value: p } as Image];
-  }
-
-  return [] as Image[];
 }
 
 export function buildNewImageName(image: Image, extension: string): string {
@@ -69,28 +33,6 @@ export function buildNewImageName(image: Image, extension: string): string {
   }
 
   return originName.replace(new RegExp(`${ext}$`), newExt);
-}
-
-/**
- * See https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types
- *
- * @param mimeType
- */
-export function imageMimeTypeToExtension(mimeType: string): string {
-  switch (mimeType) {
-    case "image/apng":
-      return ".apng";
-    case "image/avif":
-      return ".avif";
-    case "image/jpeg":
-      return ".jpg"; // .jpg, .jpeg, .jfif, .pjpeg, .pjp
-    case "image/png":
-      return ".png";
-    case "image/webp":
-      return ".webp";
-    default:
-      throw new Error("Unsupported image mime type");
-  }
 }
 
 export function imageExtensionToMimeType(extension: string): string {
@@ -114,6 +56,43 @@ export function imageExtensionToMimeType(extension: string): string {
     default:
       throw new Error("Unsupported image extension");
   }
+}
+
+async function getImagesFromSelectedFinderItems(): Promise<Image[]> {
+  return (await getSelectedFinderItems())
+    .map((f) => f.path)
+    .filter(isImage)
+    .map((p) => toImage(p));
+}
+
+async function getImagesFromClipboard(): Promise<Image[]> {
+  const { text, file } = await Clipboard.read();
+  const image = text && text.startsWith("http") ? await getImagesFromURL() : await getImageFromFileProtocol(file);
+
+  return image ? [image] : [];
+}
+
+async function getImageFromFileProtocol(file?: string): Promise<Image | null> {
+  console.log("get image from file protocol: ", file);
+
+  if (!file || !file.startsWith("file://")) {
+    return null;
+  }
+
+  // format image path to convert %20 to space
+  const p = file.replace("%20", " ").replace("file://", "");
+  const meta = await fileTypeFromFile(p);
+
+  if (!meta) {
+    console.error("cannot get file type for clipboard file path, file: ", file);
+    return null;
+  }
+
+  return meta.mime.startsWith("image/") && isImage(`.${meta.ext}`) ? { type: "filepath", value: p } : null;
+}
+
+async function getImagesFromURL(): Promise<Image | null> {
+  throw new Error("process image from URL is not supported yet");
 }
 
 function normalizeExtension(extension: string): string {
