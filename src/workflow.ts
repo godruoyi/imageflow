@@ -2,7 +2,7 @@ import { Input, Output, IWorkflow, WorkflowConfigs, WorkflowAlias, WorkflowNode,
 import resolveAction from "./actions";
 import { EasyImager } from "./supports/image";
 import React from "react";
-import path from "path";
+import logger from "./supports/logger";
 
 export async function createWorkflow(
   configs: WorkflowConfigs,
@@ -31,7 +31,8 @@ class Workflow implements IWorkflow {
 
   async run(i: Input) {
     const imager = new EasyImager(i);
-    const updater = new StateUpdater(this.stater, this.nodes, i as Image);
+    const log = logger.markdownLogger(this.prepareStages());
+    this.stater(log.toMarkdown);
 
     return (await this.nodes.reduce(async (acc: Promise<Input>, cur: WorkflowNode) => {
       const input = await acc;
