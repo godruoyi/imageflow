@@ -1,12 +1,11 @@
 import { Detail } from "@raycast/api";
 import React, { useEffect, useRef, useState } from "react";
-import { Config, Input, WorkflowAlias, WorkflowConfigs } from "./types";
+import { Input, WorkflowAlias } from "./types";
 import { getImages } from "./supports/image";
 import { getWorkflowConfigs } from "./supports/workflow";
 import { createMarkdownLogger, createWorkflow } from "./workflow";
 import { showError } from "./supports/error";
 import { usePromise } from "@raycast/utils";
-import resize from "./actions/resize";
 
 type Props = {
   arguments: {
