@@ -2,6 +2,7 @@ import fs from "fs";
 import yaml from "js-yaml";
 import path from "path";
 import { WorkflowConfigs } from "../types";
+import { getPreferenceValues } from "@raycast/api";
 
 export async function getWorkflowConfigs(): Promise<WorkflowConfigs> {
   const path = getWorkflowConfigPath();
@@ -17,13 +18,26 @@ export async function getWorkflowConfigs(): Promise<WorkflowConfigs> {
   return doc as WorkflowConfigs;
 }
 
-function getWorkflowConfigPath(): string {
-  // todo: using custom path
-  const filePath = path.join(process.env.HOME || "", ".config", "workflow.yaml");
+interface Preferences {
+  workflow: string;
+}
 
-  if (!fs.existsSync(filePath)) {
-    throw new Error("Workflow config file not found, path: " + filePath);
+function getWorkflowConfigPath(): string {
+  const { workflow } = getPreferenceValues<Preferences>();
+  if (!workflow) {
+    throw new Error(
+      "Please specify a workflow config file in the preferences, see https://github.com/godruoyi/imageflow for more details.",
+    );
   }
 
-  return filePath;
+  if (!fs.existsSync(workflow)) {
+    throw new Error("Specified workflow config file not found, path: " + workflow);
+  }
+
+  const ext = path.extname(workflow);
+  if (ext !== ".yaml" && ext !== ".yml") {
+    throw new Error("Invalid workflow config file extension, only .yaml or .yml is supported");
+  }
+
+  return workflow;
 }

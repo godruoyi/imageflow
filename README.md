@@ -67,7 +67,7 @@ services:
     access_key_id: id
     secret_access_key: key
   tinypng:
-    apiKey: x
+    apiKey: your-tinypng-api-key
 ```
 
 ## Actions
@@ -86,8 +86,8 @@ services:
 
 ## TODO
 
-- [ ] Support process image from clipboard 🍅🍅🍅🍅🍅
-- [ ] Configuration workflow.yml when extension installed 🍅🍅🍅🍅🍅
+- [x] Support process image from clipboard 🍅🍅🍅🍅🍅
+- [x] Configuration workflow.yml when extension installed 🍅🍅🍅🍅🍅
 - [ ] Introduction of sharp to process images locally 🤔
 - [ ] OpenDAL 🤔
 - [ ] Support more image processing actions like:
