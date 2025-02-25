@@ -83,6 +83,21 @@ services:
 | tomarkdown | Convert image to markdown format            | filepath or url | markdown        | -                                                                                                                                    |
 | rename     | Rename image with uuid or date or something | filepath        | filepath        | to: string<br/>available variable name "{uuid}", "{timestamp}", "{yyyy}", "{yyyy_mm}", "{yyyy_mm_dd}"                                |
 
+## Install From Raycast Store
+
+coming soon...
+
+## Install From Source & Development
+
+Clone this repo and install it locally in developer mode.
+
+You will need to have [Node.js](https://nodejs.org) and npm installed.
+
+1. Clone this repo `git clone https://github.com/godruoyi/imageflow.git`
+2. Go to the folder `cd imageflow`
+3. Install dependencies `npm install & npm run build`
+4. Go to Raycast, run `Import Extension` and select the folder
+
 
 ## TODO
 
@@ -95,18 +110,6 @@ services:
   - [ ] Watermark 🤔
   - [ ] Move to folder 🍅🍅🍅
   - [ ] Upload to other cloud storage like Aliyun OSS, Qiniu, Tencent COS, but it's better to use OpenDAL if possible 🤔
-
-
-## Development
-
-Clone this repo and install it locally in developer mode.
-
-You will need to have [Node.js](https://nodejs.org) and npm installed.
-
-1. Clone this repo `git clone https://github.com/godruoyi/imageflow.git`
-2. Go to the folder `cd imageflow`
-3. Install dependencies `npm install && npm run dev`
-4. Go to Raycast, run `Import Extension` and select the folder
 
 ## License
 
