@@ -8,10 +8,10 @@ const StatusEmoji = {
   todo: "☑️",
 };
 
-interface Stage {
+export interface Stage {
   name: string;
   status: Status;
-  logs: Log[];
+  logs?: Log[];
 }
 
 interface Log {
@@ -21,62 +21,84 @@ interface Log {
 
 type MarkdownReader = (stages: Stage[]) => string;
 
-class MarkdownLogger {
+export class MarkdownLogger {
   private static instance: MarkdownLogger;
 
-  private static markdownReader: MarkdownReader = defaultMarkdownReader;
+  private static markdownReader: MarkdownReader = markdownReader;
+
+  private readonly updater: (s: string) => void;
 
   private readonly stages: Stage[];
 
-  private constructor(stages: Stage[]) {
-    this.stages = stages;
+  private constructor(stages: Stage[], updater?: (s: string) => void) {
+    this.stages = stages.map((s) => ({ ...s, logs: [] }));
+    this.updater = updater || (() => {});
+
+    this.update();
   }
 
-  public static getInstance(stages: Stage[]): MarkdownLogger {
+  public static getInstance(stages: Stage[], updater?: (s: string) => void): MarkdownLogger {
     if (!MarkdownLogger.instance) {
-      MarkdownLogger.instance = new MarkdownLogger(stages);
+      MarkdownLogger.instance = new MarkdownLogger(stages, updater);
     }
 
     return MarkdownLogger.instance;
   }
 
-  public finish(stage: string): void {
+  public finish(stage: string, msg?: string): void {
     const stages = this.stages.filter((s) => s.name === stage);
-    if (stages.length <= 0) {
-      return;
+    if (stages.length > 0) {
+      stages[0].status = "success";
     }
 
-    stages[0].status = "success";
+    this.log(stage, msg || "finished", "success");
+    this.update();
   }
 
   public log(stage: string, message: string, status: Status): void {
     const stages = this.stages.filter((s) => s.name === stage);
     if (stages.length > 0) {
-      stages[0].logs.push({ message, status });
+      stages[0].status = status;
+      stages[0]?.logs?.push({ message: `\`${message}\``, status });
     }
+
+    this.update();
   }
 
   public toMarkdown(): string {
     return MarkdownLogger.markdownReader(this.stages);
   }
+
+  private update() {
+    this.updater(this.toMarkdown());
+  }
 }
 
-const markdownLogger = (stages: Stage[]): MarkdownLogger => {
-  return MarkdownLogger.getInstance(stages);
+const markdownLogger = (stages: Stage[], updater?: (s: string) => void): MarkdownLogger => {
+  return MarkdownLogger.getInstance(stages, updater);
 };
 
-function defaultMarkdownReader(stages: Stage[]): string {
-  const init = `
-## Progressing image ![loading](https://images.godruoyi.com/loading.gif)
+function markdownReader(stages: Stage[]): string {
+  const finished = stages.filter((s) => s.status === "success").length === stages.length;
+  const failed = stages.filter((s) => s.status === "fail").length > 0;
 
-`;
+  let head = "## Progressing image ![loading](https://images.godruoyi.com/loading.gif)\n\n";
+  if (finished) {
+    head = "## All actions are completed 🎉";
+  } else if (failed) {
+    head = "## Some actions are failed 🚨";
+  }
 
   return stages.reduce((acc, s) => {
-    const logs = s.logs.reduce((acc, l) => `${acc}\n  - ${StatusEmoji[l.status]} ${l.message}`, "");
-    const newLine = `- ${StatusEmoji[s.status]} ${s.name}${logs}`;
+    const logs = s.logs?.reduce((acc, l) => {
+      const status = l.status === "fail" || l.status === "warn" || l.status === "info" ? StatusEmoji[l.status] : "";
+      return `${acc}\n  - ${status} ${l.message}`;
+    }, "");
+
+    const newLine = `- ${StatusEmoji[s.status]} ${s.name}${logs || ""}`;
 
     return `${acc}\n${newLine}`;
-  }, init);
+  }, head);
 }
 
 export default {
