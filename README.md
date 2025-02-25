@@ -20,14 +20,14 @@ Imageflow is a Raycast extension that allows you to process images using a custo
 
 https://github.com/user-attachments/assets/32e7ccbe-39be-431d-ae5a-97dfb6a45b94
 
-Demo yaml configuration file:
-
 > [!NOTE]  
 > You can quickly get the sample configuration file by running the following command in your terminal.
 
 ```
 curl https://raw.githubusercontent.com/godruoyi/imageflow/master/workflow.yaml | tee ~/workflow.yml
 ```
+
+#### Sample configuration file `workflow.yml`:
 
 ```yaml
 workflows:
