@@ -24,10 +24,10 @@ https://github.com/user-attachments/assets/32e7ccbe-39be-431d-ae5a-97dfb6a45b94
 > You can quickly get the sample configuration file by running the following command in your terminal.
 
 ```
-curl https://raw.githubusercontent.com/godruoyi/imageflow/master/workflow.yaml | tee ~/workflow.yml
+curl https://raw.githubusercontent.com/godruoyi/imageflow/master/workflow.yaml | tee ~/workflow.yaml
 ```
 
-#### Sample configuration file `workflow.yml`:
+#### Sample configuration file `workflow.yaml`:
 
 ```yaml
 workflows:
