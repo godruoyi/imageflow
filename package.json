@@ -9,10 +9,18 @@
   "commands": [
     {
       "name": "index",
-      "title": "Process Image In Workflow",
-      "subtitle": "Optimize Image In Workflow",
-      "description": "Optimize, Resize, and Compress images as a workflow.",
-      "mode": "view"
+      "title": "Imageflow",
+      "description": "Optimize, Resize, and Compress image in workflow",
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "workflow",
+          "description": "Your configuration for the workflow",
+          "type": "file",
+          "required": true,
+          "title": "Workflow YAML"
+        }
+      ]
     }
   ],
   "dependencies": {
