@@ -1,11 +1,12 @@
 import { Detail } from "@raycast/api";
-import { usePromise } from "@raycast/utils";
 import React, { useEffect, useRef, useState } from "react";
-import { Input, WorkflowAlias } from "./types";
+import { Config, Input, WorkflowAlias, WorkflowConfigs } from "./types";
 import { getImages } from "./supports/image";
 import { getWorkflowConfigs } from "./supports/workflow";
-import { createWorkflow } from "./workflow";
+import { createMarkdownLogger, createWorkflow } from "./workflow";
 import { showError } from "./supports/error";
+import { usePromise } from "@raycast/utils";
+import resize from "./actions/resize";
 
 type Props = {
   arguments: {
@@ -32,7 +33,7 @@ export default function Index(props: Props) {
     await run(setMarkdown, setError, props.arguments.workflow);
   }, []);
 
-  return <Detail markdown={markdown} isLoading={markdown === ""} />;
+  return <Detail markdown={markdown} />;
 }
 
 async function run(
@@ -44,9 +45,13 @@ async function run(
     const images = await getImages();
     const configs = await getWorkflowConfigs();
     const workflowName = workflowAlias || ("default" as WorkflowAlias);
-    const workflow = await createWorkflow(configs, workflowName, setMarkdown);
+    const workflowNodes = configs.workflows[workflowName];
+    const logger = createMarkdownLogger(workflowNodes, setMarkdown);
+    const workflow = await createWorkflow(configs, workflowNodes, logger);
 
-    await Promise.all(images.map((image) => workflow.run(image as Input)));
+    for (const image of images) {
+      await workflow.run(image as Input);
+    }
   } catch (e) {
     setError(e instanceof Error ? e : new Error("An error occurred"));
   }

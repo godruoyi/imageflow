@@ -17,7 +17,10 @@ export async function getImages(): Promise<Image[]> {
   }
 
   if (images.length === 0) {
-    throw new Error("cannot get images from Finder or Clipboard or the selected images are not supported");
+    throw new Error(
+      "cannot get images from both finder and clipboard, or the image is not supported, we only support " +
+        ImageExtensions.join(", "),
+    );
   }
 
   return images;
@@ -73,11 +76,11 @@ async function getImagesFromClipboard(): Promise<Image[]> {
 }
 
 async function getImageFromFileProtocol(file?: string): Promise<Image | null> {
-  console.log("get image from file protocol: ", file);
-
   if (!file || !file.startsWith("file://")) {
     return null;
   }
+
+  console.log("get image from file protocol: ", file);
 
   // format image path to convert %20 to space
   const p = file.replace("%20", " ").replace("file://", "");
