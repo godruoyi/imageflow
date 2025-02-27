@@ -1,6 +1,6 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "image-flow",
+  "name": "imageflow",
   "title": "Imageflow",
   "description": "Process images in Pipeline",
   "icon": "extension_icon.png",
