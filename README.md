@@ -2,7 +2,7 @@
 
 Process images using workflow.
 
-Imageflow is a Raycast extension that allows you to process images using a custom workflow. You can resize, compress, convert image format, and upload images to S3 or Cloudflare R2 Storage.
+Imageflow is a Raycast extension for processing images with custom pipelines, you can organize operations such as resizing, uploading, and compressing into a pipeline to process images in your own way.
 
 > This extension still in development and does not submit to Raycast Extension yet, you can clone this repo and install it locally.
 
@@ -15,6 +15,7 @@ Imageflow is a Raycast extension that allows you to process images using a custo
 - [x] 🌈 Upload Image To Cloudflare R2 Storage
 - [x] 🍮 Copy Image To Clipboard
 - [x] 🐼 Convert Image To Markdown format
+- [x] 🍉 Rename Image with uuid or date or something else
 
 ## Demo
 
@@ -106,17 +107,14 @@ You will need to have [Node.js](https://nodejs.org) and npm installed.
 4. Go to Raycast, run `Import Extension` and select the folder
 
 
-## TODO
+## Need Help?
 
-- [x] Support process image from clipboard 🍅🍅🍅🍅🍅
-- [x] Configuration workflow.yml when extension installed 🍅🍅🍅🍅🍅
 - [ ] Introduction of sharp to process images locally 🤔
 - [ ] OpenDAL 🤔
 - [ ] Support more image processing actions like:
-  - [x] Rename image with uuid or date or something else 
   - [ ] Watermark 🤔
-  - [ ] Move to folder 🍅🍅🍅
-  - [ ] Upload to other cloud storage like Aliyun OSS, Qiniu, Tencent COS, but it's better to use OpenDAL if possible 🤔
+  - [ ] Move to folder
+  - [ ] Upload to other cloud storage like Google Cloud Storage, Aliyun OSS, etc. But it's better to use OpenDAL to support if possible.
 
 ## License
 

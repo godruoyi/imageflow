@@ -2,15 +2,15 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "image-flow",
   "title": "Imageflow",
-  "description": "Process images in your workflow",
-  "icon": "extension-icon.png",
+  "description": "Process images in Pipeline",
+  "icon": "extension_icon.svg",
   "author": "Godruoyi",
   "license": "MIT",
   "commands": [
     {
       "name": "index",
       "title": "Imageflow",
-      "description": "Optimize, Resize, and Compress image in workflow",
+      "description": "Optimize, resize, and compress images in your workflow",
       "mode": "view",
       "preferences": [
         {
