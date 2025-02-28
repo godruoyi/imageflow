@@ -19,7 +19,7 @@ Imageflow is a Raycast extension for processing images with custom pipelines, yo
 
 ## Demo
 
-https://github.com/user-attachments/assets/32e7ccbe-39be-431d-ae5a-97dfb6a45b94
+https://github.com/user-attachments/assets/9b22bc67-1138-4c01-8ecc-0f7c59bb3542
 
 > [!NOTE]  
 > You can quickly get the sample configuration file by running the following command in your terminal.
