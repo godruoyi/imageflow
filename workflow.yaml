@@ -34,6 +34,28 @@ workflows:
 
     - name: Copy to clipboard
       action: clipboard
+
+  file:
+    - name: Rename to `yyyy_MM_dd` format
+      action: rename
+      params:
+        # available variables: {uuid}, {timestamp}, {yyyy}, {yyyy_MM}, {yyyy_MM_dd}
+        to: "{yyyy_MM_dd}"
+
+    - name: Upload Image To S3
+      action: upload
+      params:
+        root: hello/tmp
+        bucket: gblog-images
+        cdn: https://images.godruoyi.com
+        service: s3
+
+    - name: Copy to clipboard
+      action: clipboard
+
+  any-custom-workflow-you-want-1:
+  any-custom-workflow-you-want-2:
+
 services:
   s3:
     # example to upload file to cloudflare R2 storage
