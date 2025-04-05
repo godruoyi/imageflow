@@ -1,28 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Detail } from "@raycast/api";
-import { showError } from "./supports/error";
-import { usePromise } from "@raycast/utils";
-import { processor } from "./processor";
+import React from "react";
+import { Process } from "./process";
+import { getFiles } from "./supports/image";
 
 export default function Index() {
-  const [markdown, setMarkdown] = useState("");
-  const hasRun = useRef(false);
-  const [error, setError] = useState<Error>();
-
-  useEffect(() => {
-    if (error) {
-      showError(error);
-    }
-  }, [error]);
-
-  usePromise(async () => {
-    if (hasRun.current) {
-      return;
-    }
-    hasRun.current = true;
-
-    await processor(setMarkdown, setError, "image", "file");
-  }, []);
-
-  return <Detail markdown={markdown} />;
+  return <Process workflowName={"file"} imageLoader={getFiles} />;
 }
