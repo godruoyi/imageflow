@@ -125,11 +125,11 @@ export class EasyImager implements Imager {
   }
 }
 
-function isImage(path: string): boolean {
+export function isImage(path: string): boolean {
   return ImageExtensions.some((ext) => path.endsWith(ext));
 }
 
-function isFile(path: string): boolean {
+export function isFile(path: string): boolean {
   return fs.existsSync(path);
 }
 

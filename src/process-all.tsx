@@ -20,7 +20,11 @@ export default function Index() {
   }, [error]);
 
   const imageLoader = async () => {
-    return [inputImage] as Image[];
+    if (inputImage) {
+      return [inputImage] as Image[];
+    }
+
+    return [];
   };
 
   const { isLoading } = usePromise(async () => {

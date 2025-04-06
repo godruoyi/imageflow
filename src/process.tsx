@@ -36,7 +36,12 @@ export function Process({
     try {
       const configs = await getWorkflowConfigs();
       const images = await imageLoader();
-      await processor(images, configs, workflowName, setMarkdown);
+
+      if (images.length === 0) {
+        setError(new Error("No images found"));
+      } else {
+        await processor(images, configs, workflowName, setMarkdown);
+      }
     } catch (e) {
       setError(e instanceof Error ? e : new Error("An error occurred"));
     }

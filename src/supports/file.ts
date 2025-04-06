@@ -5,8 +5,6 @@ export async function saveStreamToTmpFile(stream: NodeJS.ReadableStream, filenam
   // todo: widows support?
   const tmp = path.join("/tmp", `imageflow_${Date.now()}_${filename}`);
 
-  console.log(tmp);
-
   return saveStreamToFile(stream, tmp);
 }
 
