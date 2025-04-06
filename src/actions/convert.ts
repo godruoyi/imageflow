@@ -28,6 +28,7 @@ export default async function (
   originImage: Imager,
 ): Promise<Output> {
   validateInputMustBeImage(i);
+
   const key = validateAndGetTinyPngApiKey(services);
   const format = validateAndGetConvertFormat(config);
   const mimetype = imageExtensionToMimeType(format);

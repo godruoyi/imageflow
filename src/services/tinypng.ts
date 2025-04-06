@@ -1,6 +1,7 @@
 import { createReadStream } from "fs";
 import fetch, { BodyInit } from "node-fetch";
 import { Image } from "../types";
+import * as util from "node:util";
 
 const ShortenURL = "https://api.tinify.com/shrink";
 
@@ -142,7 +143,7 @@ async function _upload(body: BodyInit | null, key: string): Promise<string> {
  * @returns boolean
  */
 function isPrivateURL(url: string): boolean {
-  return url.indexOf("api.tinify.com/output") !== -1;
+  return url.includes("api.tinify.com/output");
 }
 
 export default {

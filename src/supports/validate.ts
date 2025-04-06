@@ -3,7 +3,7 @@ import fs from "fs";
 import { isImage } from "./image";
 
 export function validateInputMustBeFilepath(input: Input): boolean {
-  if (input.type == "filepath" && input.value !== "" && fs.existsSync(input.value)) {
+  if (input.type === "filepath" && input.value !== "" && fs.existsSync(input.value)) {
     return true;
   }
 
@@ -21,7 +21,7 @@ export function validateInputMustBeImage(input: Input) {
 export function validateAndGetTinyPngApiKey(config: Record<string, Config>): string {
   const key = config?.["tinypng"]?.["apiKey"];
   if (!key) {
-    throw new Error("TinyPNG API key is required");
+    throw new Error("TinyPNG API key is required but not configured");
   }
 
   return key as string;
@@ -30,7 +30,7 @@ export function validateAndGetTinyPngApiKey(config: Record<string, Config>): str
 export function validateAndGetConvertFormat(config: Config): string {
   const format = config?.["format"] as string;
   if (!format) {
-    throw new Error(`convert format is required`);
+    throw new Error(`[convert] action format is required but not configured`);
   }
 
   return format as string;

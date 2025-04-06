@@ -23,7 +23,7 @@ export default async function (
   const inputPath = i.value;
   const originPath = originImage.get().value;
 
-  if (inputPath == originPath) {
+  if (inputPath === originPath) {
     return i as Output;
   }
 
@@ -31,7 +31,9 @@ export default async function (
   const newFile = originPath.replace(path.basename(originPath), filename);
 
   await saveStreamToFile(fs.createReadStream(inputPath), newFile);
-  fs.unlinkSync(originPath);
+  if (fs.existsSync(originPath)) {
+    fs.unlinkSync(originPath);
+  }
 
   originImage.set({ type: "filepath", value: newFile });
 

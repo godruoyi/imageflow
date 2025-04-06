@@ -90,8 +90,8 @@ workflows:
       action: upload
       params:
         root: hello/tmp
-        bucket: gblog-images
-        cdn: https://images.godruoyi.com
+        bucket: <YOUR_BUCKET_NAME>
+        cdn: <YOUR_CDN_URL_IF_NEEDED(optional)>
         service: s3
 
     - name: Copy to clipboard
@@ -105,7 +105,7 @@ services:
     # example to upload file to cloudflare R2 storage
     endpoint: https://your-account-id.r2.cloudflarestorage.com
     region: auto
-    access_key_id: id
-    secret_access_key: key
+    access_key_id: <YOUR_ACCESS_KEY_ID>
+    secret_access_key: <YOUR_SECRET_ACCESS_KEY>
   tinypng:
-    apiKey: x
+    apiKey: <YOUR_TINYPNG_API_KEY>

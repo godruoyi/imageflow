@@ -88,7 +88,7 @@ async function getImageFromFileProtocol(file?: string): Promise<Image | null> {
   console.log("get image from file protocol: ", file);
 
   // format image path to convert %20 to space
-  const p = file.replace("%20", " ").replace("file://", "");
+  const p = file.replaceAll("%20", " ").replace("file://", "");
   const meta = await fileTypeFromFile(p);
 
   if (!meta) {
