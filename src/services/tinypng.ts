@@ -1,7 +1,6 @@
 import { createReadStream } from "fs";
 import fetch, { BodyInit } from "node-fetch";
 import { Image } from "../types";
-import * as util from "node:util";
 
 const ShortenURL = "https://api.tinify.com/shrink";
 
