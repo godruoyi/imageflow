@@ -3,8 +3,9 @@
   "name": "image-flow",
   "title": "Imageflow",
   "description": "Image Flow is a powerful optimization tool for images and files, enabling you to process them efficiently with workflows.",
-  "icon": "extension_icon.png",
+  "icon": "icon.png",
   "author": "Godruoyi",
+  "categories": ["Media", "Other"],
   "license": "MIT",
   "commands": [
     {
