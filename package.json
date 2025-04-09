@@ -22,7 +22,7 @@
     },
     {
       "name": "process-all",
-      "title": "Process with specific workflow",
+      "title": "Process with Specific Workflow",
       "description": "Specify a workflow to process images or files",
       "mode": "view"
     }
